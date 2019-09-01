@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LandingPage /> renders landing page as expected 1`] = `
+<DimmerDimmable
+  as={[Function]}
+  dimmed={true}
+>
+  <Dimmer
+    active={true}
+    inverted={true}
+  >
+    <Loader
+      active={true}
+    >
+      Loading
+    </Loader>
+  </Dimmer>
+</DimmerDimmable>
+`;

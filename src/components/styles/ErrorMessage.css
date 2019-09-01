@@ -1,0 +1,17 @@
+.error {
+  padding: 2em;
+  background: white;
+  margin: 2em 0;
+  border: 1px solid rgba(0,0,0,0.05);
+  border-left: 5px solid red;
+
+}
+
+.error p {
+  margin: 0;
+  font-weight: 100;
+}
+
+.error strong {
+  margin-right: 1rem;
+}

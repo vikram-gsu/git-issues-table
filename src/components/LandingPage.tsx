@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
-import formatDate from '../lib/formatDate';
+import formatDate from "../lib/formatDate";
 import ProjectIssueStatus from "./ProjectIssueStatus";
-const captured_response = require("../data/captured_response.json");
+import ErrorMessage from "./ErrorMessage";
+import { fetchIssues } from "../api/issues";
+// const captured_response = require("../data/captured_response.json");
 
 export type label = {
   url: string;
@@ -22,21 +24,27 @@ export type GitlabIssue = {
 interface LandingPageState {
   issues: Array<GitlabIssue>;
   loading: Boolean;
+  error?: any;
 }
 
 class LandingPage extends Component<{}, LandingPageState> {
   state = {
     issues: [],
-    loading: true
+    loading: true,
+    error: undefined
   };
   componentDidMount() {
     this.setState({ loading: true });
 
-    fetch("https://api.github.com/repos/facebook/react/issues")
-      .then(response => response.json())
-      .then(issues =>
+    fetchIssues().then(async ({ status, statusText, data }) => {
+      if (status !== 200) {
         this.setState({
-          issues: captured_response.map(
+          error: new Error(`${status} - ${statusText}`)
+        });
+      } else {
+        const issues = await data;
+        this.setState({
+          issues: issues.map(
             ({
               number,
               title,
@@ -54,8 +62,9 @@ class LandingPage extends Component<{}, LandingPageState> {
             })
           ),
           loading: false
-        })
-      );
+        });
+      }
+    });
 
     // this.setState({
     //   issues: captured_response.map(response => ({
@@ -65,8 +74,12 @@ class LandingPage extends Component<{}, LandingPageState> {
     //   }))
     // });
   }
+  componentDidCatch(error: any, errorInfo: any) {
+    console.log(error, errorInfo);
+  }
   render() {
-    const { loading, issues } = this.state;
+    const { loading, issues, error } = this.state;
+    if (error) return <ErrorMessage errorObj={error} />;
     return !this.state.loading ? (
       <>
         <ProjectIssueStatus issues={issues} />

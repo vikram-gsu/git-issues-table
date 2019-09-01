@@ -48,7 +48,7 @@ describe("<ProjectIssueStatus />", () => {
 
   it("renders tableheader as expected", () => {
     const wrapper = mount(<ProjectIssueStatus issues={mockResponses} />);
-    console.log(wrapper.debug());
+    // console.log(wrapper.debug());
 
     const TableHeader = wrapper.find('TableHeader');
     expect(TableHeader.children().text()).toContain('Issue Number');
@@ -62,7 +62,6 @@ describe("<ProjectIssueStatus />", () => {
   it("renders tablebody as expected", () => {
     const mockResponse = mockResponses[0];
     const wrapper = mount(<ProjectIssueStatus issues={mockResponses} />);
-    console.log(wrapper.debug());
 
     const TableBody = wrapper.find('TableBody');
     expect(TableBody.children().text()).toContain(mockResponse.title);
@@ -70,21 +69,30 @@ describe("<ProjectIssueStatus />", () => {
     expect(TableBody.find('TableRow').children()).toHaveLength(2);
     expect(toJSON(TableBody)).toMatchSnapshot();
   });
-  
+
+  it("renders empty labels component as expected", () => {
+
+    let mockResponseWithoutLabels = mockResponses.filter(response => response.labels.length === 0);
+    mockResponseWithoutLabels = (mockResponseWithoutLabels.length>0)?mockResponseWithoutLabels[0]: mockResponseWithoutLabels;
+
+    const wrapper = mount(<ProjectIssueStatus issues={[mockResponseWithoutLabels]} />);
+
+    const Labels = wrapper.find('Labels');
+    expect(Labels.find('ul').children()).toHaveLength(0);
+
+    expect(toJSON(Labels)).toMatchSnapshot()
+
+  })
   it("renders labels component as expected", () => {
     let mockResponseWithLabels = mockResponses.filter(response => response.labels.length >0);
     mockResponseWithLabels = (mockResponseWithLabels.length>0)?mockResponseWithLabels[0]: mockResponseWithLabels;
-    
-    let mockResponseWithoutLabels = mockResponses.filter(response => response.labels.length >0);
-    mockResponseWithoutLabels = (mockResponseWithoutLabels.length>0)?mockResponseWithoutLabels[0]: mockResponseWithoutLabels;
-    
-    const wrapper = mount(<ProjectIssueStatus issues={mockResponses} />);
-    console.log(wrapper.debug());
+
+    const wrapper = mount(<ProjectIssueStatus issues={[mockResponseWithLabels]} />);
 
     const Labels = wrapper.find('Labels');
-    expect(Labels.children().text()).toContain('React Flare');
-    expect(Labels.children()).toHaveLength(2);
-    
+    expect(Labels.children().text()).toContain(mockResponseWithLabels.labels[0].name);
+    expect(Labels.find('ul').children()).toHaveLength(2);
+
     expect(toJSON(Labels)).toMatchSnapshot()
 
   })
