@@ -1,0 +1,202 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProjectIssueStatus /> renders tablebody as expected 1`] = `
+<TableBody
+  as="tbody"
+>
+  <tbody
+    className=""
+  >
+    <TableRow
+      as="tr"
+      cellAs="td"
+      key="16630"
+    >
+      <tr
+        className=""
+      >
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            16630
+          </td>
+        </TableCell>
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            Chrome Extension Background Page and useEffect Not Triggered
+          </td>
+        </TableCell>
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            August 31, 2019, 10:31:51 EDT
+          </td>
+        </TableCell>
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            August 31, 2019, 10:39:19 EDT
+          </td>
+        </TableCell>
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            <Labels
+              labels={
+                Array [
+                  Object {
+                    "color": "e7e7e7",
+                    "default": false,
+                    "id": 196858374,
+                    "name": "CLA Signed",
+                    "node_id": "MDU6TGFiZWwxOTY4NTgzNzQ=",
+                    "url": "https://api.github.com/repos/facebook/react/labels/CLA%20Signed",
+                  },
+                  Object {
+                    "color": "63f2ff",
+                    "default": false,
+                    "id": 1296748300,
+                    "name": "React Flare",
+                    "node_id": "MDU6TGFiZWwxMjk2NzQ4MzAw",
+                    "url": "https://api.github.com/repos/facebook/react/labels/React%20Flare",
+                  },
+                ]
+              }
+            >
+              <ul>
+                <li
+                  key="196858374"
+                >
+                  <a
+                    href="https://api.github.com/repos/facebook/react/labels/CLA%20Signed"
+                    style={
+                      Object {
+                        "backgroundColor": "#e7e7e7",
+                        "borderRadius": "1px",
+                        "color": "black",
+                        "padding": "0.1em",
+                      }
+                    }
+                  >
+                    CLA Signed
+                  </a>
+                </li>
+                <li
+                  key="1296748300"
+                >
+                  <a
+                    href="https://api.github.com/repos/facebook/react/labels/React%20Flare"
+                    style={
+                      Object {
+                        "backgroundColor": "#63f2ff",
+                        "borderRadius": "1px",
+                        "color": "black",
+                        "padding": "0.1em",
+                      }
+                    }
+                  >
+                    React Flare
+                  </a>
+                </li>
+              </ul>
+            </Labels>
+          </td>
+        </TableCell>
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            open
+          </td>
+        </TableCell>
+      </tr>
+    </TableRow>
+    <TableRow
+      as="tr"
+      cellAs="td"
+      key="16629"
+    >
+      <tr
+        className=""
+      >
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            16629
+          </td>
+        </TableCell>
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            Can't use instance values without refs
+          </td>
+        </TableCell>
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            August 31, 2019, 10:31:51 EDT
+          </td>
+        </TableCell>
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            August 31, 2019, 10:39:19 EDT
+          </td>
+        </TableCell>
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            <Labels
+              labels={Array []}
+            >
+              <ul />
+            </Labels>
+          </td>
+        </TableCell>
+        <TableCell
+          as="td"
+        >
+          <td
+            className=""
+          >
+            open
+          </td>
+        </TableCell>
+      </tr>
+    </TableRow>
+  </tbody>
+</TableBody>
+`;

@@ -1,33 +1,52 @@
 import React, { Component } from "react";
-import { Table, Grid, Search } from "semantic-ui-react";
+import { Table, Grid, Search, SearchProps } from "semantic-ui-react";
 import "./styles/ProjectIssueStatus.css";
+import { GitlabIssue, label } from "./LandingPage";
 
-
-const Labels = ({ labels }) => (
-  <ul>
-    {labels.map(({ url, color, name, id }) => (
-      <li key={id}>
-        <a
-          href={url}
-          style={{
-            backgroundColor: `#${color}`,
-            color: "black",
-            padding: "0.1em",
-            borderRadius: "1px"
-          }}
-        >
-          {name}
-        </a>
-      </li>
-    ))}
-  </ul>
-);
-
-const escape = s => {
+const escape = (s: string) => {
   return s.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
-class ProjectIssueStatus extends Component {
+type LabelsProps = {
+  labels: [label?];
+};
+const Labels = ({ labels }: LabelsProps) => (
+  <ul>
+    {labels && labels.length>0 && labels.map(label => {
+      const { url, color, name, id } = label!;
+      return (
+        <li key={id}>
+          <a
+            href={url}
+            style={{
+              backgroundColor: `#${color}`,
+              color: "black",
+              padding: "0.1em",
+              borderRadius: "1px"
+            }}
+          >
+            {name}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+);
+
+type ProjectIssueStatusProps = {
+  issues: Array<GitlabIssue>;
+};
+
+type ProjectIssueStatusStatus = {
+  issues: Array<GitlabIssue>;
+  isLoading: Boolean;
+  value?: string;
+};
+
+class ProjectIssueStatus extends Component<
+  ProjectIssueStatusProps,
+  ProjectIssueStatusStatus
+> {
   initialState = {
     issues: this.props.issues,
     isLoading: false,
@@ -35,15 +54,17 @@ class ProjectIssueStatus extends Component {
   };
   state = this.initialState;
 
-  handleSearchChange = (e, { value }) => {
+  handleSearchChange = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    { value }: SearchProps
+  ) => {
     this.setState({ isLoading: true, value });
 
-    // console.log(this.state.issues.filter(issue => isMatch(issue)))
     setTimeout(() => {
       if (this.state.value.length < 1) return this.setState(this.initialState);
 
       const re = new RegExp(escape(this.state.value), "i");
-      const isMatch = result => re.test(result.title);
+      const isMatch = (issue: GitlabIssue) => re.test(issue.title);
 
       this.setState({
         isLoading: false,
