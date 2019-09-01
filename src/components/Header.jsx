@@ -16,9 +16,7 @@ const Header = () => {
         </Grid.Column>
         <Grid.Column width={2}></Grid.Column>
         <Grid.Column floated="right" width={6}>
-          <div className="search">
-            <Search size='huge' />
-          </div>
+
         </Grid.Column>
       </Grid>
     </div>

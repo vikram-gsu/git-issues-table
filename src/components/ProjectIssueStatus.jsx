@@ -1,14 +1,21 @@
 import React, { Component } from "react";
-import { Table, Menu, Icon, Grid } from "semantic-ui-react";
+import { Table, Grid, Search } from "semantic-ui-react";
 import "./styles/ProjectIssueStatus.css";
 
-const captured_response = require("../data/captured_response.json");
 
 const Labels = ({ labels }) => (
   <ul>
     {labels.map(({ url, color, name, id }) => (
       <li key={id}>
-        <a href={url} style={{ backgroundColor: `#${color}`, color:'black', padding:'0.1em', borderRadius:'1px' }}>
+        <a
+          href={url}
+          style={{
+            backgroundColor: `#${color}`,
+            color: "black",
+            padding: "0.1em",
+            borderRadius: "1px"
+          }}
+        >
           {name}
         </a>
       </li>
@@ -16,47 +23,57 @@ const Labels = ({ labels }) => (
   </ul>
 );
 
-const formatDate = dateString => {
-  const dateObj = new Date(dateString);
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: false,
-    timeZoneName: "short"
-  };
-  return Intl.DateTimeFormat("en-US", options).format(dateObj);
+const escape = s => {
+  return s.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
 };
-class ProjectIssueStatus extends Component {
-  state = {
-    issues: null
-  };
-  componentDidMount() {
-    // fetch("https://api.github.com/repos/facebook/react/issues")
-    //   .then(response => response.json())
-    // .then(issues => this.setState({ issues }));
 
-    this.setState({
-      issues: captured_response.map(response => ({
-        ...response,
-        created_at: formatDate(response.created_at),
-        updated_at: formatDate(response.updated_at)
-      }))
-    });
-  }
+class ProjectIssueStatus extends Component {
+  initialState = {
+    issues: this.props.issues,
+    isLoading: false,
+    value: ""
+  };
+  state = this.initialState;
+
+  handleSearchChange = (e, { value }) => {
+    this.setState({ isLoading: true, value });
+
+    // console.log(this.state.issues.filter(issue => isMatch(issue)))
+    setTimeout(() => {
+      if (this.state.value.length < 1) return this.setState(this.initialState);
+
+      const re = new RegExp(escape(this.state.value), "i");
+      const isMatch = result => re.test(result.title);
+
+      this.setState({
+        isLoading: false,
+        issues: this.props.issues.filter(issue => isMatch(issue))
+      });
+    }, 300);
+  };
 
   render() {
-    this.state.issues &&
-      this.state.issues.map(({ created_at }) => {
-        const createdAtObj = new Date(created_at);
-        console.log(createdAtObj.getDate());
-      });
     return (
       <div>
         <Grid columns={16}>
+          <Grid.Row>
+            <Grid.Column width={2}></Grid.Column>
+            <Grid.Column width={4}>
+              <h1>Github Issue Details</h1>
+            </Grid.Column>
+            <Grid.Column width={4}></Grid.Column>
+            <Grid.Column width={4}>
+              <div className="search">
+                <Search
+                  size="huge"
+                  width="100%"
+                  loading={this.state.isLoading}
+                  onSearchChange={this.handleSearchChange}
+                />
+              </div>
+            </Grid.Column>
+            <Grid.Column width={2}></Grid.Column>
+          </Grid.Row>
           <Grid.Column width={2}></Grid.Column>
           <Grid.Column width={12}>
             <div className="table">
@@ -97,20 +114,6 @@ class ProjectIssueStatus extends Component {
                     })}
                 </Table.Body>
               </Table>
-            </div>
-            <div className="pagination">
-              <Menu pagination>
-                <Menu.Item as="a" icon>
-                  <Icon name="chevron left" />
-                </Menu.Item>
-                <Menu.Item as="a">1</Menu.Item>
-                <Menu.Item as="a">2</Menu.Item>
-                <Menu.Item as="a">3</Menu.Item>
-                <Menu.Item as="a">4</Menu.Item>
-                <Menu.Item as="a" icon>
-                  <Icon name="chevron right" />
-                </Menu.Item>
-              </Menu>
             </div>
           </Grid.Column>
           <Grid.Column width={2}></Grid.Column>
