@@ -1,4 +1,4 @@
-# Take home test
+# Git Issues Table - Basic
 
 ## Tools Used
 
