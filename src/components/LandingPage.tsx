@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
 import formatDate from "../lib/formatDate";
 import ProjectIssueStatus from "./ProjectIssueStatus";
@@ -21,30 +21,19 @@ export type GitlabIssue = {
   state: string;
 };
 
-interface LandingPageState {
-  issues: Array<GitlabIssue>;
-  loading: Boolean;
-  error?: any;
-}
+const LandingPage = () => {
+  const [issues, setIssues] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
 
-class LandingPage extends Component<{}, LandingPageState> {
-  state = {
-    issues: [],
-    loading: true,
-    error: undefined
-  };
-  componentDidMount() {
-    this.setState({ loading: true });
-
+  useEffect(() => {
     fetchIssues().then(async ({ status, statusText, data }) => {
       if (status !== 200) {
-        this.setState({
-          error: new Error(`${status} - ${statusText}`)
-        });
+        setError(new Error(`${status} - ${statusText}`));
       } else {
         const issues = await data;
-        this.setState({
-          issues: issues.map(
+        setIssues(
+          issues.map(
             ({
               number,
               title,
@@ -60,38 +49,26 @@ class LandingPage extends Component<{}, LandingPageState> {
               created_at: formatDate(created_at),
               updated_at: formatDate(updated_at)
             })
-          ),
-          loading: false
-        });
+          )
+        );
+        setLoading(false);
       }
     });
+  }, []);
 
-    // this.setState({
-    //   issues: captured_response.map(response => ({
-    //     ...response,
-    //     created_at: formatDate(response.created_at),
-    //     updated_at: formatDate(response.updated_at)
-    //   }))
-    // });
-  }
-  componentDidCatch(error: any, errorInfo: any) {
-    console.log(error, errorInfo);
-  }
-  render() {
-    const { loading, issues, error } = this.state;
-    if (error) return <ErrorMessage errorObj={error} />;
-    return !this.state.loading ? (
-      <>
-        <ProjectIssueStatus issues={issues} />
-      </>
-    ) : (
-      <Dimmer.Dimmable as={Segment} dimmed={loading}>
-        <Dimmer active={loading} inverted>
-          <Loader active={loading}>Loading</Loader>
-        </Dimmer>
-      </Dimmer.Dimmable>
-    );
-  }
-}
+  if (error) return <ErrorMessage errorObj={error} />;
+  return !loading ? (
+    <>
+      <ProjectIssueStatus issues={issues} />
+    </>
+  ) : (
+    <Dimmer.Dimmable as={Segment} dimmed={loading}>
+      <Dimmer active={loading} inverted>
+        <Loader active={loading}>Loading</Loader>
+      </Dimmer>
+    </Dimmer.Dimmable>
+  );
+};
+
 
 export default LandingPage;
